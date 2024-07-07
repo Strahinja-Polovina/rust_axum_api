@@ -37,6 +37,7 @@ pub mod helpers {
 
 pub mod middleware {
     pub mod auth_middleware;
+    pub mod permission_middleware;
 }
 
 pub mod routes {

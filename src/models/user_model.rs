@@ -27,6 +27,7 @@ pub struct CreateUserDTO {
 #[diesel(table_name = users)]
 pub struct UpdateUserDTO {
     pub email: String,
+    pub password: String
 }
 
 #[derive(Serialize, Deserialize, Queryable)]

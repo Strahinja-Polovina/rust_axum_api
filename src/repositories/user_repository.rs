@@ -60,8 +60,14 @@ impl UserRepository {
         target_id: i32,
         updated_data: UpdateUserDTO,
     ) -> Result<GetUsersDTO, diesel::result::Error> {
+        let hash_password = hash_password(&updated_data.password);
+        let update_user_data = UpdateUserDTO {
+            email: updated_data.email,
+            password: hash_password.unwrap()
+        };
+
         diesel::update(users.find(target_id))
-            .set(&updated_data)
+            .set(&update_user_data)
             .get_result::<User>(conn)
             .expect(UPDATE_USER_ERROR);
 
