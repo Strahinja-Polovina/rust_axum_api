@@ -1,3 +1,4 @@
+use std::num::ParseIntError;
 use axum::body::Body;
 use crate::constants::middleware_constants::{
     BEARER_WITH_SPACE, INVALID_HEADER_VALUE_ERROR, INVALID_TOKEN_ERROR, INVALID_TOKEN_FORMAT_ERROR,
@@ -16,9 +17,29 @@ pub async fn middleware(req: Request<Body>, next: Next) -> Response {
                 let token = &header_str[7..];
 
                 let is_valid_token = validate_token(token);
+                let user_id = req.uri().path().split('/').nth(2);
 
                 match is_valid_token {
-                    Ok(_) => next.run(req).await,
+                    Ok(claims) => {
+                        match user_id {
+                            Some(id) => {
+                                match id.parse::<i32>() {
+                                    Ok(id) => {
+                                            if id == claims.sub {
+                                                next.run(req).await
+                                            } else {
+                                                Response::new("Don't have permission".to_string().into())
+                                            }
+                                    }
+                                    Err(_) => {
+                                        Response::new("Invalid user id param".to_string().into())
+                                    }
+                                }
+                            }
+                            None => next.run(req).await
+                        }
+
+                    }
                     Err(_) => Response::new(INVALID_TOKEN_ERROR.to_string().into()),
                 }
             } else {
