@@ -1,7 +1,7 @@
 use crate::config::db::get_connection;
-use crate::messages::controller_constants::{
-    DATA, GENERATING_JWT_ERROR, LOGIN_SUCCESSFULLY_MESSAGE, MESSAGE, STATUS, USER_NOT_FOUND_ERROR,
-    WRONG_PASSWORD_ERROR, INTERNAL_SERVER_ERROR
+use crate::constants::controller_constants::{
+    DATA, GENERATING_JWT_ERROR, INTERNAL_SERVER_ERROR, LOGIN_SUCCESSFULLY_MESSAGE, MESSAGE, STATUS,
+    USER_NOT_FOUND_ERROR, WRONG_PASSWORD_ERROR,
 };
 use crate::models::user_model::{GetUsersDTO, LoginDTO, LoginResponseDTO};
 use crate::repositories::user_repository::UserRepository;

@@ -1,4 +1,4 @@
-use crate::messages::services_constants::JWT_GENERATE_ERROR;
+use crate::constants::services_constants::JWT_GENERATE_ERROR;
 use crate::models::user_model::GetUsersDTO;
 use crate::services::token_service::generate_jwt;
 

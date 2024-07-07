@@ -1,4 +1,4 @@
-use crate::messages::config_constants::{DATABASE_URL, DATABASE_URL_ERROR, POOL_CONNECTION_ERROR};
+use crate::constants::config_constants::{DATABASE_URL, DATABASE_URL_ERROR, POOL_CONNECTION_ERROR};
 use diesel::{
     pg::PgConnection,
     r2d2::{ConnectionManager, Pool, PoolError, PooledConnection},

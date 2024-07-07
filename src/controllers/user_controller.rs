@@ -1,17 +1,15 @@
-use axum::{extract::Path, http::StatusCode, response::IntoResponse, Json as Json};
+use axum::{extract::Path, http::StatusCode, response::IntoResponse, Json};
 use serde_json::json;
 
-use crate::messages::controller_constants::{
+use crate::constants::controller_constants::{DATA, MESSAGE, STATUS};
+use crate::constants::controller_constants::{
     INTERNAL_SERVER_ERROR, USER_CREATED_MESSAGE, USER_CREATE_BAD_REQUEST_ERROR,
-    USER_DELETED_SUCCESSFULLY_MESSAGE, USER_EMAIL_EXISTS_ERROR, USER_DELETE_ERROR,
-    USER_UPDATED_ERROR_MESSAGE, USER_UPDATED_SUCCESSFULLY_MESSAGE, USER_FETCH_SUCCESSFUL_MESSAGE, USER_NOT_FOUND_ERROR
+    USER_DELETED_SUCCESSFULLY_MESSAGE, USER_DELETE_ERROR, USER_EMAIL_EXISTS_ERROR,
+    USER_FETCH_SUCCESSFUL_MESSAGE, USER_NOT_FOUND_ERROR, USER_UPDATED_ERROR_MESSAGE,
+    USER_UPDATED_SUCCESSFULLY_MESSAGE,
 };
 use crate::models::user_model::{CreateUserDTO, UpdateUserDTO};
-use crate::{
-    config::db::get_connection,
-    repositories::user_repository::UserRepository,
-};
-use crate::messages::controller_constants::{DATA, MESSAGE, STATUS};
+use crate::{config::db::get_connection, repositories::user_repository::UserRepository};
 
 pub async fn get_users() -> impl IntoResponse {
     match get_connection() {

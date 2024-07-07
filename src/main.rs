@@ -1,5 +1,5 @@
 use axum::Router;
-use axumapi::messages::global_constants::ENV_MESSAGE_ERROR;
+use axumapi::constants::global_constants::ENV_MESSAGE_ERROR;
 use axumapi::routes::auth_routes::auth_routes;
 use axumapi::routes::user_routes::user_routes;
 

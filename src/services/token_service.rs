@@ -1,9 +1,9 @@
+use crate::constants::services_constants::{JSON_SECRET, JWT_SECRET_ENV_ERROR};
 use crate::models::user_model::GetUsersDTO;
 use jsonwebtoken::{decode, encode, DecodingKey, EncodingKey, Header, Validation};
 use serde::{Deserialize, Serialize};
 use std::default::Default;
 use std::env;
-use crate::messages::services_constants::{JSON_SECRET, JWT_SECRET_ENV_ERROR};
 
 #[derive(Serialize, Deserialize, Debug)]
 pub struct Claims {

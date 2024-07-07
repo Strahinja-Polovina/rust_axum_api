@@ -2,7 +2,7 @@ pub mod config {
     pub mod db;
 }
 
-pub mod messages {
+pub mod constants {
     pub mod config_constants;
     pub mod controller_constants;
     pub mod global_constants;

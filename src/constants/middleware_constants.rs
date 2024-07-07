@@ -2,7 +2,6 @@
 
 pub const BEARER_WITH_SPACE: &str = "Bearer ";
 
-
 // MIDDLEWARE ERRORS
 
 pub const INVALID_TOKEN_ERROR: &str = "Not Authorized: Invalid token";

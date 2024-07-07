@@ -1,10 +1,10 @@
+use crate::constants::repositories_constants::UPDATE_USER_ERROR;
 use crate::models::user_model::{CreateUserDTO, GetUsersDTO, UpdateUserDTO, User};
 use crate::schema::users::dsl::users;
 use crate::schema::users::{email, id};
 use crate::services::password_service::hash_password;
 use diesel::prelude::*;
 use diesel::PgConnection;
-use crate::messages::repositories_constants::UPDATE_USER_ERROR;
 
 pub struct UserRepository;
 
