@@ -2,15 +2,6 @@ pub mod config {
     pub mod db;
 }
 
-pub mod constants {
-    pub mod config_constants;
-    pub mod controller_constants;
-    pub mod global_constants;
-    pub mod middleware_constants;
-    pub mod repositories_constants;
-    pub mod services_constants;
-}
-
 pub mod models {
     pub mod user_model;
 }
@@ -30,9 +21,6 @@ pub mod services {
     pub mod auth_service;
     pub mod password_service;
     pub mod token_service;
-}
-pub mod helpers {
-    pub mod response_structs;
 }
 
 pub mod middleware {

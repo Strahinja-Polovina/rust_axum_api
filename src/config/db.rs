@@ -1,4 +1,3 @@
-use crate::constants::config_constants::{DATABASE_URL, DATABASE_URL_ERROR, POOL_CONNECTION_ERROR};
 use diesel::{
     pg::PgConnection,
     r2d2::{ConnectionManager, Pool, PoolError, PooledConnection},
@@ -9,11 +8,11 @@ use std::env;
 pub type PgPool = Pool<ConnectionManager<PgConnection>>;
 
 lazy_static! {
-    static ref POOL: PgPool = create_connection_pool().expect(POOL_CONNECTION_ERROR);
+    static ref POOL: PgPool = create_connection_pool().expect("Failed to create DB Pool");
 }
 
 fn create_connection_pool() -> Result<PgPool, PoolError> {
-    let database_url = env::var(DATABASE_URL).expect(DATABASE_URL_ERROR);
+    let database_url = env::var("DATABASE_URL").expect("DATABASE_URL doesnt exist in .env");
     let manager = ConnectionManager::<PgConnection>::new(database_url);
     Pool::builder().build(manager)
 }

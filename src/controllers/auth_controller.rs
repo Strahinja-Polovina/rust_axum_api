@@ -1,8 +1,5 @@
 use crate::config::db::get_connection;
-use crate::constants::controller_constants::{
-    DATA, GENERATING_JWT_ERROR, INTERNAL_SERVER_ERROR, LOGIN_SUCCESSFULLY_MESSAGE, MESSAGE, STATUS,
-    USER_NOT_FOUND_ERROR, WRONG_PASSWORD_ERROR,
-};
+
 use crate::models::user_model::{GetUsersDTO, LoginDTO, LoginResponseDTO};
 use crate::repositories::user_repository::UserRepository;
 use crate::services::password_service::is_valid;
@@ -24,6 +21,7 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
                         let user_to_token = GetUsersDTO {
                             id: user_exist.id,
                             email: user_exist.email,
+                            roles: user_exist.roles
                         };
                         let token = generate_jwt(user_to_token);
                         match token {
@@ -32,9 +30,9 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
                                 (
                                     StatusCode::OK,
                                     Json(json!({
-                                        STATUS: StatusCode::OK.as_u16(),
-                                        MESSAGE: LOGIN_SUCCESSFULLY_MESSAGE,
-                                        DATA: response
+                                        "status": StatusCode::OK.as_u16(),
+                                        "message": "Login successfully",
+                                        "data": response
                                     })),
                                 )
                                     .into_response()
@@ -42,9 +40,9 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
                             Err(_) => (
                                 StatusCode::BAD_REQUEST,
                                 Json(json!({
-                                    STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                                    MESSAGE: GENERATING_JWT_ERROR,
-                                    DATA: null,
+                                    "status": StatusCode::BAD_REQUEST.as_u16(),
+                                    "message": "Generating JWT token error",
+                                    "data": null,
                                 })),
                             )
                                 .into_response(),
@@ -53,9 +51,9 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
                         (
                             StatusCode::BAD_REQUEST,
                             Json(json!({
-                                STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                                MESSAGE: WRONG_PASSWORD_ERROR,
-                                DATA: null,
+                                "status": StatusCode::BAD_REQUEST.as_u16(),
+                                "message": "Wrong password",
+                                "data": null,
                             })),
                         )
                             .into_response()
@@ -64,9 +62,9 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
                 Err(_) => (
                     StatusCode::NOT_FOUND,
                     Json(json!({
-                        STATUS: StatusCode::NOT_FOUND.as_u16(),
-                        MESSAGE: USER_NOT_FOUND_ERROR,
-                        DATA: null,
+                        "status": StatusCode::NOT_FOUND.as_u16(),
+                        "message": "User not found",
+                        "data": null,
                     })),
                 )
                     .into_response(),
@@ -75,9 +73,9 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
         Err(_) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(json!({
-                STATUS: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                MESSAGE: INTERNAL_SERVER_ERROR,
-                DATA: null,
+                "status": StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+                "message": "Internal server error",
+                "data": null,
             })),
         )
             .into_response(),

@@ -1,7 +1,3 @@
-use crate::constants::middleware_constants::{
-    BEARER_WITH_SPACE, INVALID_HEADER_VALUE_ERROR, INVALID_TOKEN_ERROR, INVALID_TOKEN_FORMAT_ERROR,
-    MISSING_AUTHORIZATION_HEADER_ERROR,
-};
 use crate::services::token_service::validate_token;
 use axum::body::Body;
 use axum::http::header::AUTHORIZATION;
@@ -13,7 +9,7 @@ use std::sync::Arc;
 pub async fn permission_middleware(req: Request<Body>, next: Next) -> Response {
     if let Some(header_value) = req.headers().get(AUTHORIZATION) {
         if let Ok(header_str) = header_value.to_str() {
-            if header_str.starts_with(BEARER_WITH_SPACE) {
+            if header_str.starts_with("Bearer ") {
                 let token = &header_str[7..];
 
                 let is_valid_token = validate_token(token);
@@ -23,7 +19,7 @@ pub async fn permission_middleware(req: Request<Body>, next: Next) -> Response {
                     Ok(claims) => match user_id {
                         Some(id) => match id.parse::<i32>() {
                             Ok(id) => {
-                                if id == claims.sub {
+                                if id == claims.sub || claims.roles == "admin".to_string() {
                                     let mut req = req;
                                     req.extensions_mut().insert(Arc::new(claims));
                                     next.run(req).await
@@ -35,15 +31,15 @@ pub async fn permission_middleware(req: Request<Body>, next: Next) -> Response {
                         },
                         None => next.run(req).await,
                     },
-                    Err(_) => Response::new(INVALID_TOKEN_ERROR.to_string().into()),
+                    Err(_) => Response::new("Invalid token".to_string().into()),
                 }
             } else {
-                Response::new(INVALID_TOKEN_FORMAT_ERROR.to_string().into())
+                Response::new("Invalid token format".to_string().into())
             }
         } else {
-            Response::new(INVALID_HEADER_VALUE_ERROR.to_string().into())
+            Response::new("Invalid header value".to_string().into())
         }
     } else {
-        Response::new(MISSING_AUTHORIZATION_HEADER_ERROR.to_string().into())
+        Response::new("Missing authorization header".to_string().into())
     }
 }

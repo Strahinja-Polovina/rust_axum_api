@@ -1,11 +1,10 @@
 use axum::Router;
-use axumapi::constants::global_constants::ENV_MESSAGE_ERROR;
 use axumapi::routes::auth_routes::auth_routes;
 use axumapi::routes::user_routes::user_routes;
 
 #[tokio::main]
 async fn main() {
-    dotenv::dotenv().expect(ENV_MESSAGE_ERROR);
+    dotenv::dotenv().expect(".env doesnt exist");
 
     let app = Router::new()
         .nest("/api", auth_routes())

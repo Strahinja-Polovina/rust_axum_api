@@ -1,13 +1,5 @@
 use axum::{extract::Path, http::StatusCode, response::IntoResponse, Json};
 use serde_json::json;
-
-use crate::constants::controller_constants::{DATA, MESSAGE, STATUS};
-use crate::constants::controller_constants::{
-    INTERNAL_SERVER_ERROR, USER_CREATED_MESSAGE, USER_CREATE_BAD_REQUEST_ERROR,
-    USER_DELETED_SUCCESSFULLY_MESSAGE, USER_DELETE_ERROR, USER_EMAIL_EXISTS_ERROR,
-    USER_FETCH_SUCCESSFUL_MESSAGE, USER_NOT_FOUND_ERROR, USER_UPDATED_ERROR_MESSAGE,
-    USER_UPDATED_SUCCESSFULLY_MESSAGE,
-};
 use crate::models::user_model::{CreateUserDTO, UpdateUserDTO};
 use crate::{config::db::get_connection, repositories::user_repository::UserRepository};
 
@@ -17,18 +9,18 @@ pub async fn get_users() -> impl IntoResponse {
             Ok(users) => (
                 StatusCode::OK,
                 Json(json!({
-                    STATUS: StatusCode::OK.as_u16(),
-                    MESSAGE: USER_FETCH_SUCCESSFUL_MESSAGE,
-                    DATA: users,
+                    "status": StatusCode::OK.as_u16(),
+                    "message": "Success fetch users",
+                    "data": users,
                 })),
             )
                 .into_response(),
             Err(_) => (
                 StatusCode::INTERNAL_SERVER_ERROR,
                 Json(json!({
-                    STATUS: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                    MESSAGE: INTERNAL_SERVER_ERROR,
-                    DATA: null,
+                    "status": StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+                    "message": "Internal server error",
+                    "data": null,
                 })),
             )
                 .into_response(),
@@ -36,9 +28,9 @@ pub async fn get_users() -> impl IntoResponse {
         Err(_) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(json!({
-                STATUS: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                MESSAGE: INTERNAL_SERVER_ERROR,
-                DATA: null,
+                "status": StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+                "message": "Internal server error",
+                "data": null,
             })),
         )
             .into_response(),
@@ -51,18 +43,18 @@ pub async fn get_user(Path(user_id): Path<i32>) -> impl IntoResponse {
             Ok(user) => (
                 StatusCode::OK,
                 Json(json!({
-                    STATUS: StatusCode::OK.as_u16(),
-                    MESSAGE: USER_FETCH_SUCCESSFUL_MESSAGE,
-                    DATA: user,
+                    "status": StatusCode::OK.as_u16(),
+                    "message": "Success fetch user",
+                    "data": user,
                 })),
             )
                 .into_response(),
             Err(_) => (
                 StatusCode::NOT_FOUND,
                 Json(json!({
-                    STATUS: StatusCode::NOT_FOUND.as_u16(),
-                    MESSAGE: USER_NOT_FOUND_ERROR,
-                    DATA: null,
+                    "status": StatusCode::NOT_FOUND.as_u16(),
+                    "message": "User not found",
+                    "data": null,
                 })),
             )
                 .into_response(),
@@ -70,9 +62,9 @@ pub async fn get_user(Path(user_id): Path<i32>) -> impl IntoResponse {
         Err(_) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(json!({
-                STATUS: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                MESSAGE: INTERNAL_SERVER_ERROR,
-                DATA: null,
+                "status": StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+                "message": "Internal server error",
+                "data": null,
             })),
         )
             .into_response(),
@@ -86,9 +78,9 @@ pub async fn create_user(Json(new_user): Json<CreateUserDTO>) -> impl IntoRespon
                 Ok(_) => (
                     StatusCode::BAD_REQUEST,
                     Json(json!({
-                        STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                        MESSAGE: USER_EMAIL_EXISTS_ERROR,
-                        DATA: null,
+                        "status": StatusCode::BAD_REQUEST.as_u16(),
+                        "message": "E-mail already exist",
+                        "data": null,
                     })),
                 )
                     .into_response(),
@@ -96,18 +88,18 @@ pub async fn create_user(Json(new_user): Json<CreateUserDTO>) -> impl IntoRespon
                     Ok(created_user) => (
                         StatusCode::CREATED,
                         Json(json!({
-                            STATUS: StatusCode::CREATED.as_u16(),
-                            MESSAGE: USER_CREATED_MESSAGE,
-                            DATA: created_user,
+                            "status": StatusCode::CREATED.as_u16(),
+                            "message": "User created successfully",
+                            "data": created_user,
                         })),
                     )
                         .into_response(),
                     Err(_) => (
                         StatusCode::BAD_REQUEST,
                         Json(json!({
-                            STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                            MESSAGE: USER_CREATE_BAD_REQUEST_ERROR,
-                            DATA: null,
+                            "status": StatusCode::BAD_REQUEST.as_u16(),
+                            "message": "Bad request",
+                            "data": null,
                         })),
                     )
                         .into_response(),
@@ -117,9 +109,9 @@ pub async fn create_user(Json(new_user): Json<CreateUserDTO>) -> impl IntoRespon
         Err(_) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(json!({
-                STATUS: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                MESSAGE: INTERNAL_SERVER_ERROR,
-                DATA: null,
+                "status": StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+                "message": "Internal server error",
+                "data": null,
             })),
         )
             .into_response(),
@@ -135,18 +127,18 @@ pub async fn delete_user(Path(user_id): Path<i32>) -> impl IntoResponse {
                     Ok(_) => (
                         StatusCode::OK,
                         Json(json!({
-                            STATUS: StatusCode::OK.as_u16(),
-                            MESSAGE: USER_DELETED_SUCCESSFULLY_MESSAGE,
-                            DATA: user_deleted.unwrap(),
+                            "status": StatusCode::OK.as_u16(),
+                            "message": "User deleted successfully",
+                            "data": user_deleted.unwrap(),
                         })),
                     )
                         .into_response(),
                     Err(_) => (
                         StatusCode::BAD_REQUEST,
                         Json(json!({
-                            STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                            MESSAGE: USER_DELETE_ERROR,
-                            DATA: null,
+                            "status": StatusCode::BAD_REQUEST.as_u16(),
+                            "message": "Cannot delete user",
+                            "data": null,
                         })),
                     )
                         .into_response(),
@@ -154,9 +146,9 @@ pub async fn delete_user(Path(user_id): Path<i32>) -> impl IntoResponse {
                 Err(_) => (
                     StatusCode::BAD_REQUEST,
                     Json(json!({
-                        STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                        MESSAGE: USER_NOT_FOUND_ERROR,
-                        DATA: null,
+                        "status": StatusCode::BAD_REQUEST.as_u16(),
+                        "message": "User not found",
+                        "data": null,
                     })),
                 )
                     .into_response(),
@@ -165,9 +157,9 @@ pub async fn delete_user(Path(user_id): Path<i32>) -> impl IntoResponse {
         Err(_) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(json!({
-                STATUS: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                MESSAGE: INTERNAL_SERVER_ERROR,
-                DATA: null,
+                "status": StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+                "message": "Internal server error",
+                "data": null,
             })),
         )
             .into_response(),
@@ -184,9 +176,9 @@ pub async fn update_user(
                 Ok(_) => (
                     StatusCode::BAD_REQUEST,
                     Json(json!({
-                        STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                        MESSAGE: USER_EMAIL_EXISTS_ERROR,
-                        DATA: null,
+                        "status": StatusCode::BAD_REQUEST.as_u16(),
+                        "message": "User already exist",
+                        "data": null,
                     })),
                 )
                     .into_response(),
@@ -197,18 +189,18 @@ pub async fn update_user(
                         Ok(user) => (
                             StatusCode::OK,
                             Json(json!({
-                                STATUS: StatusCode::OK.as_u16(),
-                                MESSAGE: USER_UPDATED_SUCCESSFULLY_MESSAGE,
-                                DATA: user,
+                                "status": StatusCode::OK.as_u16(),
+                                "message": "Update successfully",
+                                "data": user,
                             })),
                         )
                             .into_response(),
                         Err(_) => (
                             StatusCode::BAD_REQUEST,
                             Json(json!({
-                                STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                                MESSAGE: USER_UPDATED_ERROR_MESSAGE,
-                                DATA: null,
+                                "status": StatusCode::BAD_REQUEST.as_u16(),
+                                "message": "Cannot update user",
+                                "data": null,
                             })),
                         )
                             .into_response(),
@@ -218,9 +210,9 @@ pub async fn update_user(
             Err(_) => (
                 StatusCode::BAD_REQUEST,
                 Json(json!({
-                    STATUS: StatusCode::BAD_REQUEST.as_u16(),
-                    MESSAGE: USER_NOT_FOUND_ERROR,
-                    DATA: null,
+                    "status": StatusCode::BAD_REQUEST.as_u16(),
+                    "message": "User not found",
+                    "data": null,
                 })),
             )
                 .into_response(),
@@ -228,9 +220,9 @@ pub async fn update_user(
         Err(_) => (
             StatusCode::INTERNAL_SERVER_ERROR,
             Json(json!({
-                STATUS: StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
-                MESSAGE: INTERNAL_SERVER_ERROR,
-                DATA: null,
+                "status": StatusCode::INTERNAL_SERVER_ERROR.as_u16(),
+                "message": "Internal server error",
+                "data": null,
             })),
         )
             .into_response(),
