@@ -12,15 +12,25 @@ pub struct Claims {
     pub roles: String
 }
 
+trait ClaimsConstructor {
+    fn new(sub: i32, email: String, exp: usize, roles: String) -> Self;
+}
+
+impl ClaimsConstructor for Claims {
+    fn new(sub: i32, email: String, exp: usize, roles: String) -> Self {
+        Claims {
+            sub,
+            email,
+            exp,
+            roles
+        }
+    }
+}
+
 pub fn generate_jwt(user: GetUsersDTO) -> Result<String, jsonwebtoken::errors::Error> {
     let expire_time = (chrono::Utc::now() + chrono::Duration::hours(24)).timestamp() as usize;
     let secret_key = env::var("JSON_SECRET").expect("JWT secret doesnt exist");
-    let my_claims = Claims {
-        sub: user.id,
-        email: user.email,
-        exp: expire_time,
-        roles: user.roles
-    };
+    let my_claims = Claims::new(user.id, user.email, expire_time, user.roles);
 
     let key = EncodingKey::from_secret(secret_key.as_bytes());
     encode(&Header::default(), &my_claims, &key)

@@ -19,6 +19,20 @@ pub struct GetUsersDTO {
     pub roles: String
 }
 
+pub trait GetUserDtoConstructor {
+    fn new(id: i32, email: String, roles: String) -> Self;
+}
+
+impl GetUserDtoConstructor for GetUsersDTO{
+    fn new(id: i32, email: String, roles: String) -> Self {
+        GetUsersDTO{
+            id,
+            email,
+            roles
+        }
+    }
+}
+
 #[derive(Deserialize, Insertable)]
 #[diesel(table_name = users)]
 pub struct CreateUserDTO {

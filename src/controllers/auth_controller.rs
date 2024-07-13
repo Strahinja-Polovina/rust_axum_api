@@ -1,6 +1,6 @@
 use crate::config::db::get_connection;
 
-use crate::models::user_model::{GetUsersDTO, LoginDTO, LoginResponseDTO};
+use crate::models::user_model::{GetUserDtoConstructor, GetUsersDTO, LoginDTO, LoginResponseDTO};
 use crate::repositories::user_repository::UserRepository;
 use crate::services::password_service::is_valid;
 use crate::services::token_service::generate_jwt;
@@ -18,11 +18,7 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
                 Ok(user_exist) => {
                     let verify_password = is_valid(&user_login_data.password, &user_exist.password);
                     if verify_password {
-                        let user_to_token = GetUsersDTO {
-                            id: user_exist.id,
-                            email: user_exist.email,
-                            roles: user_exist.roles
-                        };
+                        let user_to_token = GetUsersDTO::new(user_exist.id, user_exist.email, user_exist.roles);
                         let token = generate_jwt(user_to_token);
                         match token {
                             Ok(token) => {
