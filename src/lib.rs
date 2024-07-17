@@ -1,5 +1,6 @@
 pub mod config {
     pub mod db;
+    pub mod test_db;
 }
 
 pub mod models {

@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod tests {
-    use axumapi::config::db::establish_connection;
+    use axumapi::config::test_db::establish_connection_test;
     use axumapi::models::user_model::{CreateUserDTO, GetUsersDTO, UpdateUserDTO};
     use axumapi::repositories::user_repository::UserRepository;
     use diesel::r2d2::{ConnectionManager, PooledConnection};
@@ -12,7 +12,7 @@ mod tests {
 
     fn setup() -> PooledConnection<ConnectionManager<PgConnection>> {
         dotenv().ok();
-        establish_connection()
+        establish_connection_test()
     }
 
     fn create_unique_test_user(
