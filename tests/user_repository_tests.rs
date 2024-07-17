@@ -3,19 +3,22 @@ mod tests {
     use axumapi::config::db::establish_connection;
     use axumapi::models::user_model::{CreateUserDTO, GetUsersDTO, UpdateUserDTO};
     use axumapi::repositories::user_repository::UserRepository;
+    use diesel::r2d2::{ConnectionManager, PooledConnection};
     use diesel::result::Error;
     use diesel::PgConnection;
     use dotenv::dotenv;
     use std::thread::sleep;
     use std::time::Duration;
-    use diesel::r2d2::{ConnectionManager, PooledConnection};
 
     fn setup() -> PooledConnection<ConnectionManager<PgConnection>> {
         dotenv().ok();
         establish_connection()
     }
 
-    fn create_unique_test_user(conn: &mut PgConnection, suffix: &str) -> Result<GetUsersDTO, Error> {
+    fn create_unique_test_user(
+        conn: &mut PgConnection,
+        suffix: &str,
+    ) -> Result<GetUsersDTO, Error> {
         let user = CreateUserDTO {
             email: format!("test{}@test.com", suffix),
             password: "test_password".to_string(),
@@ -72,8 +75,8 @@ mod tests {
         let user = create_unique_test_user(&mut conn, &timestamp.to_string())
             .expect("Failed to create test user");
 
-        let user_found = UserRepository::find_one(&mut conn, user.id)
-            .expect("Failed to find user by ID");
+        let user_found =
+            UserRepository::find_one(&mut conn, user.id).expect("Failed to find user by ID");
 
         assert_eq!(user.email, user_found.email);
 
@@ -83,8 +86,8 @@ mod tests {
     #[test]
     fn user_repository_find_all_tests() {
         let mut conn = setup();
-        let initial_users = UserRepository::find_all(&mut conn)
-            .expect("Failed to fetch initial users");
+        let initial_users =
+            UserRepository::find_all(&mut conn).expect("Failed to fetch initial users");
 
         let timestamp = chrono::Utc::now().timestamp_micros();
         let user = create_unique_test_user(&mut conn, &timestamp.to_string())
@@ -102,8 +105,7 @@ mod tests {
         let user2 = create_unique_test_user(&mut conn, &timestamp3.to_string())
             .expect("Failed to create test user");
 
-        let users = UserRepository::find_all(&mut conn)
-            .expect("Failed to fetch all users");
+        let users = UserRepository::find_all(&mut conn).expect("Failed to fetch all users");
 
         assert_eq!(initial_users.len() + 3, users.len());
 
