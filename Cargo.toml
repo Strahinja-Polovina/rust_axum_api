@@ -16,3 +16,5 @@ diesel = { version = "2.2.1", features = ["postgres_backend", "postgres", "r2d2"
 bcrypt = "0.15.1"
 jsonwebtoken = "9.3.0"
 chrono = "0.4.38"
+
+

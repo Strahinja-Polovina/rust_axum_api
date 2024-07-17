@@ -6,5 +6,5 @@ pub fn hash_password(password: &str) -> Result<String, bcrypt::BcryptError> {
 }
 
 pub fn is_valid(password: &str, hashed_password: &str) -> bool {
-    verify(password, hashed_password).unwrap_or_else(|_| false)
+    verify(password, hashed_password).unwrap_or(false)
 }

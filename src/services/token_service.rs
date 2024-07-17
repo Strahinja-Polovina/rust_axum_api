@@ -9,7 +9,7 @@ pub struct Claims {
     pub sub: i32,
     pub email: String,
     pub exp: usize,
-    pub roles: String
+    pub roles: String,
 }
 
 trait ClaimsConstructor {
@@ -22,7 +22,7 @@ impl ClaimsConstructor for Claims {
             sub,
             email,
             exp,
-            roles
+            roles,
         }
     }
 }

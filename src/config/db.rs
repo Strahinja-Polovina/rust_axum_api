@@ -20,3 +20,7 @@ fn create_connection_pool() -> Result<PgPool, PoolError> {
 pub fn get_connection() -> Result<PooledConnection<ConnectionManager<PgConnection>>, PoolError> {
     POOL.get()
 }
+
+pub fn establish_connection() -> PooledConnection<ConnectionManager<PgConnection>> {
+    get_connection().expect("Failed to get a database connection from the pool")
+}

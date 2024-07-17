@@ -38,7 +38,7 @@ impl UserRepository {
         let data_to_insert = CreateUserDTO {
             email: new_user.email.to_lowercase(),
             password: hash_password.unwrap(),
-            roles: Some("member".to_string())
+            roles: Some("member".to_string()),
         };
         let inserted_id = diesel::insert_into(users)
             .values(&data_to_insert)
@@ -63,7 +63,7 @@ impl UserRepository {
         let hash_password = hash_password(&updated_data.password);
         let update_user_data = UpdateUserDTO {
             email: updated_data.email,
-            password: hash_password.unwrap()
+            password: hash_password.unwrap(),
         };
 
         diesel::update(users.find(target_id))

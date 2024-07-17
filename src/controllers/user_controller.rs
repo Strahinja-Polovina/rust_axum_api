@@ -1,7 +1,7 @@
-use axum::{extract::Path, http::StatusCode, response::IntoResponse, Json};
-use serde_json::json;
 use crate::models::user_model::{CreateUserDTO, UpdateUserDTO};
 use crate::{config::db::get_connection, repositories::user_repository::UserRepository};
+use axum::{extract::Path, http::StatusCode, response::IntoResponse, Json};
+use serde_json::json;
 
 pub async fn get_users() -> impl IntoResponse {
     match get_connection() {

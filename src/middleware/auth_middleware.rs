@@ -8,7 +8,7 @@ use axum::response::Response;
 pub async fn auth_middleware(req: Request<Body>, next: Next) -> Response {
     if let Some(header_value) = req.headers().get(AUTHORIZATION) {
         if let Ok(header_str) = header_value.to_str() {
-            if header_str.starts_with("Bearer ") {
+            if header_str.len() >= 7 {
                 let token = &header_str[7..];
 
                 let is_valid_token = validate_token(token);

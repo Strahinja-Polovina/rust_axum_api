@@ -18,7 +18,8 @@ pub async fn login(user: Json<LoginDTO>) -> impl IntoResponse {
                 Ok(user_exist) => {
                     let verify_password = is_valid(&user_login_data.password, &user_exist.password);
                     if verify_password {
-                        let user_to_token = GetUsersDTO::new(user_exist.id, user_exist.email, user_exist.roles);
+                        let user_to_token =
+                            GetUsersDTO::new(user_exist.id, user_exist.email, user_exist.roles);
                         let token = generate_jwt(user_to_token);
                         match token {
                             Ok(token) => {
